@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Books Home</title>
+    {% load static %}
+    {% include 'book_reviews/common/head_js.html' %}
+    {% include 'book_reviews/common/head_css.html' %}
+  </head>
+  <body>
+    <header>
+      <h2 id="header_icon">CodingDojo Book Reviews</h2>
+      <span>Welcome, {{ request.session.alias }}</span>
+      <a href="{% url 'book_reviews:add_book' %}">Add Book and Reviews</a>
+      <a href="{% url 'login:logout' %}">Logout</a>
+    </header>
+    <main>
+      <div id="recent_reviews" style="display: inline-block; vertical-align: top; width: 400px;">
+        <h3>Recent Book Reviews:</h3>
+        {% for review in recent_reviews %}
+          <div>
+            <p><a href="{% url 'book_reviews:view_book' id=review.book.id %}">{{ review.book.title }}</a></p>
+            <ul type="none">
+              <li>Rating: {{ review.rating }}</li>
+              <li><a href="{% url 'book_reviews:view_user' id=review.author.id %}">{{ review.author.alias }}</a> says: {{ review.comments }}</li>
+              <li>Posted on: {{ review.created_at|date:"F j, Y, g:i A" }}</li>
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+      <div id="other_books_reviews" style="display: inline-block; vertical-align: top; width: 300px;">
+        <h3>Other Books with Reviews:</h3>
+        <div style="border: 1px solid black; width: 290px; height: 5.5rem; overflow: scroll;">
+          {% for book in all_books %}
+            <p><a href="{% url 'book_reviews:view_book' id=book.id %}">{{ book.title }}</a></p>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+    {% include 'book_reviews/common/body_footer.html' %}
+  </body>
+</html>
